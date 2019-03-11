@@ -337,7 +337,7 @@ version-do() {
 minor-version-do() {
     local new="$1"
     local minor_tag=$(echo "$new" | cut --delimiter="." --fields=1,2)
-    if git tag --list | grep -q "$minor_tag"
+    if git tag --list | grep -xq "$minor_tag"
     then
         git tag delete "$minor_tag"
     fi
@@ -347,7 +347,7 @@ minor-version-do() {
 major-version-do() {
     local new="$1"
     local major_tag=$(echo "$new" | cut --delimiter="." --fields=1)
-    if git tag --list | grep -q "$major_tag"
+    if git tag --list | grep -xq "$major_tag"
     then
         git tag delete "$major_tag"
     fi
