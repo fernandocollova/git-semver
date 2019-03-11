@@ -329,7 +329,29 @@ version-do() {
     elif plugin-run "$new" "$version"
     then
         $cmd "$new" && echo "$new"
+        minor-version-do "$new"
+        major-version-do "$new"
     fi
+}
+
+minor-version-do() {
+    local new="$1"
+    local minor_tag=$(echo "$new" | cut --delimiter="." --fields=1,2)
+    if git tag --list | grep -q "$minor_tag"
+    then
+        git tag delete "$minor_tag"
+    fi
+    git tag "$minor_tag"
+}
+
+major-version-do() {
+    local new="$1"
+    local major_tag=$(echo "$new" | cut --delimiter="." --fields=1)
+    if git tag --list | grep -q "$major_tag"
+    then
+        git tag delete "$major_tag"
+    fi
+    git tag "$major_tag"
 }
 
 ########################################
