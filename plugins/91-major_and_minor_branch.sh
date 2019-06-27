@@ -9,14 +9,14 @@ function run() {
     major_number=$(echo "$version_new" | cut --delimiter="." --fields=1)
 
     git checkout "$major_number.$minor_number" || git checkout -b "$major_number.$minor_number"
-    if ! git merge --ff-only -m "Atomatic merge to minor branch of tag" "$current_branch"
+    if ! git merge --ff-only -m "Automatic merge to minor branch of tag" "$current_branch"
     then
         echo "Minor tag branch cannot be fast forwarded. Aborting."
         return 113
     fi
 
     git checkout "$major_number" || git checkout -b "$major_number"
-    if ! git merge --ff-only -m "Atomatic merge to major branch of tag" "$current_branch"
+    if ! git merge --ff-only -m "Automatic merge to major branch of tag" "$current_branch"
     then
         echo "Major tag branch cannot be fast forwarded. Aborting."
         return 113
