@@ -8,14 +8,24 @@ function run() {
     minor_number=$(echo "$version_new" | cut --delimiter="." --fields=2)
     major_number=$(echo "$version_new" | cut --delimiter="." --fields=1)
 
-    git checkout "$major_number.$minor_number" || git checkout -b "$major_number.$minor_number"
+    if ! git checkout "$major_number.$minor_number"
+    then
+        echo "Branch $major_number.$minor_number does not exist."
+        git checkout -b "$major_number.$minor_number"
+    fi
+
     if ! git merge --ff-only
     then
         echo "Minor tag branch cannot be fast forwarded. Aborting."
         return 113
     fi
 
-    git checkout "$major_number" || git checkout -b "$major_number"
+    if ! git checkout "$major_number"
+    then
+        echo "Branch $major_number.$minor_number does not exist."
+        git checkout -b "$major_number"
+    fi
+
     if ! git merge --ff-only
     then
         echo "Major tag branch cannot be fast forwarded. Aborting."
